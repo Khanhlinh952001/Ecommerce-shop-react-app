@@ -1,14 +1,12 @@
-import React, { createContext, useState, useEffect } from "react";
-import { database } from "../firebase";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { database } from '../../../firebase';
 import { get,ref,child } from 'firebase/database';
-export const ProductContext = createContext();
-
-const ProductProvider = ({ children }) => {
-  // products state
+const useProducts = (category, query) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // fetch products
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,12 +39,9 @@ const ProductProvider = ({ children }) => {
 
     fetchData();
   }, []);
-
-  return (
-    <ProductContext.Provider value={{ products }}>
-      {children}
-    </ProductContext.Provider>
-  );
+  return { products, loading, error };
 };
 
-export default ProductProvider;
+export default useProducts;
+
+

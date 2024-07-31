@@ -1,21 +1,33 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   // cart state
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    // Retrieve cart from localStorage or initialize with an empty array
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
   // item amount state
   const [itemAmount, setItemAmount] = useState(0);
+
   // total price state
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    // Calculate the total price
     const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
+      return accumulator + currentItem.sales * currentItem.amount;
     }, 0);
     setTotal(total);
-  });
+
+    // Save the cart to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   // update item amount
   useEffect(() => {
@@ -31,9 +43,7 @@ const CartProvider = ({ children }) => {
   const addToCart = (product, id) => {
     const newItem = { ...product, amount: 1 };
     // check if the item is already in the cart
-    const cartItem = cart.find((item) => {
-      return item.id === id;
-    });
+    const cartItem = cart.find((item) => item.id === id);
     if (cartItem) {
       const newCart = [...cart].map((item) => {
         if (item.id === id) {
@@ -43,6 +53,7 @@ const CartProvider = ({ children }) => {
       setCart(newCart);
     } else {
       setCart([...cart, newItem]);
+    //  toast.success(`${product.name} added to cart!`);
     }
   };
 
@@ -54,7 +65,7 @@ const CartProvider = ({ children }) => {
     setCart(newCart);
   };
 
-  // cleart cart
+  // clear cart
   const clearCart = () => {
     setCart([]);
   };

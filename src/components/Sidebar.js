@@ -12,7 +12,7 @@ import { CartContext } from "../contexts/CartContext";
 const Sidebar = () => {
   const { isOpen, handleClose } = useContext(SidebarContext);
   const { cart, clearCart, itemAmount, total } = useContext(CartContext);
-
+ 
   return (
     <div
       className={`${
@@ -29,7 +29,7 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-2 h-[360px] md:h-[480px] lg:h-[420px] overflow-y-auto overflow-x-hidden border-b">
-        {cart.map((item) => {
+       {cart.map((item) => {
           return <CartItem item={item} key={item.id} />;
         })}
       </div>
@@ -38,7 +38,7 @@ const Sidebar = () => {
           {/* total */}
           <div className="font-semibold">
             <span className="mr-2">Subtotal:</span> ${" "}
-            {parseFloat(total).toFixed(2)}
+            {Math.floor( total).toLocaleString('en')} 
           </div>
           {/* clear cart icon */}
           <div
@@ -48,14 +48,10 @@ const Sidebar = () => {
             <FiTrash2 />
           </div>
         </div>
+       
         <Link
-          to={"/"}
-          className="bg-gray-200 flex p-3 justify-center items-center text-primary w-full font-medium"
-        >
-          View Cart
-        </Link>
-        <Link
-          to={"/"}
+          to={"/order"}
+          onClick={handleClose}
           className="bg-primary flex p-3 justify-center items-center text-white w-full font-medium"
         >
           Checkout

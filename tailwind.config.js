@@ -24,6 +24,15 @@ module.exports = {
       backgroundImage: {
         hero: "url('./img/bghero.jpg')",
       },
+      keyframes: {
+        'fly-to-cart': {
+          '0%': { transform: 'translate(0, 0)', opacity: '1' },
+          '100%': { transform: 'translate(calc(100vw - 3rem), calc(4rem - 100vh))', opacity: '0' },
+        },
+      },
+      animation: {
+        'fly-to-cart': 'fly-to-cart 1s ease-in-out forwards',
+      },
     },
   },
   plugins: [],
